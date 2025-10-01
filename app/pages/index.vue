@@ -10,35 +10,14 @@
 		<ul class="z-50 flex w-fit flex-col gap-y-2 font-semibold italic text-foreground">
 			<li>
 				<h1 class="pointer-events-none mb-8 inline-flex w-fit items-center gap-x-2 text-6xl font-bold not-italic leading-none tracking-wide md:mb-16 md:text-8xl">
-					Knowless
-					<span class="mt-1 rounded-xl bg-foreground px-3 py-1.5 text-sm leading-none tracking-normal text-background sm:text-lg md:mt-6 md:px-4 md:py-2 md:text-2xl">Beta</span>
+					Lucas Grandjean
+					<span class="mt-1 rounded-xl bg-foreground px-3 py-1.5 text-sm leading-none tracking-normal text-background sm:text-lg md:mt-6 md:px-4 md:py-2 md:text-2xl">Culture</span>
 				</h1>
 			</li>
-			<NavLink label="Solo" :link="{ to: '/solo' }" size="lg" />
-			<NavLink label="Multijoueurs" :link="{ to: '/multi' }" size="lg" class="md:mb-2" />
-			<NavLink label="Communauté" size="sm" :link="{ to: 'https://github.com/alexisdechiara/knowless/discussions', target: '_blank' }">
-				<template #trailing>
-					<Icon name="lucide:external-link" class="text-base" />
-				</template>
-			</NavLink>
+			<NavLink label="Jouer" :link="{ to: isAdmin ? '/multi' : '/multi/join' }" size="lg" class="md:mb-2" />
 			<DialogSettings>
 				<NavLink label="Options" size="sm" />
 			</DialogSettings>
-			<NavLink class="italic" size="sm">
-				<FriendListPopover>
-					<span class="italic cursor-pointer">Social</span>
-				</FriendListPopover>
-			</NavLink>
-			<NavLink size="sm">
-				<Dialog>
-					<DialogTrigger>
-						<span class="italic cursor-pointer">Légal</span>
-					</DialogTrigger>
-					<DialogContent class="h-3/4 max-w-4xl">
-						<LegalDialog class="overflow-y-auto" />
-					</DialogContent>
-				</Dialog>
-			</NavLink>
 			<NavLink label="Déconnexion" class="text-destructive" size="sm" :link="{ to: '/register' }" @click="supabase.auth.signOut()" />
 		</ul>
 		<div v-if="isMotionable" class="absolute bottom-8 right-8 hidden gap-x-2 rounded-full bg-foreground p-2 shadow-md transition-all md:flex">
@@ -73,11 +52,13 @@
 </template>
 
 <script lang="ts" setup>
+
 import { TabsIndicator, TabsList, TabsRoot, TabsTrigger } from "reka-ui"
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core"
 
 const supabase = useSupabaseClient()
 const breakpoints = useBreakpoints(breakpointsTailwind)
+const { getPlayer } = usePlayerStore()
 const isMotionable = computed(() =>
   import.meta.client &&
   breakpoints.greaterOrEqual("md") &&
@@ -87,6 +68,23 @@ const isMotionable = computed(() =>
 
 const selectedGame = ref<string | null>("")
 const isPoweringOff = ref(false)
+const isAdmin = ref(false)
+
+onMounted(async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  // OPTION 1: if role is stored in profiles table
+  const { data: profile } = await supabase
+    .from("players")
+    .select("role")
+    .eq("id", user.id)
+    .single<any>()
+
+  if (profile?.role === "admin") {
+    isAdmin.value = true
+  }
+})
 
 function turnOffGame() {
 	isPoweringOff.value = true

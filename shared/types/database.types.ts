@@ -141,6 +141,7 @@ export type Database = {
           theme: Database["public"]["Enums"]["themes"] | null
           username: string
           usertag: string
+          role: string
         }
         Insert: {
           avatar?: string | null
@@ -155,6 +156,7 @@ export type Database = {
           theme?: Database["public"]["Enums"]["themes"] | null
           username: string
           usertag?: string
+          role?: string
         }
         Update: {
           avatar?: string | null
@@ -169,6 +171,7 @@ export type Database = {
           theme?: Database["public"]["Enums"]["themes"] | null
           username?: string
           usertag?: string
+          role?: string
         }
         Relationships: [
           {

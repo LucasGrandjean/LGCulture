@@ -78,7 +78,7 @@
       size="icon"
       class="invisible fixed bottom-4 left-4 size-12 sm:visible md:bottom-8 md:left-8"
     >
-      <NuxtLink to="/multi">
+      <NuxtLink to="/">
         <Icon name="lucide:chevron-left" class="text-xl" />
       </NuxtLink>
     </Button>
