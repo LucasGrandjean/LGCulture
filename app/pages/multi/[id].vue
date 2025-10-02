@@ -679,6 +679,11 @@ async function nextQuestion() {
 async function submitAnswer(newAnswer: string) {
   if (!game.value) return;
 
+  // Prevent updating answers during correction
+  if (game.value.phase === "correction") {
+    console.warn("Cannot submit answers during correction phase");
+    return;
+  }
   // Snapshot the intended question index at which this answer belongs
   const indexAtSubmit =
     typeof questionIndexAtStart.value === "number"
