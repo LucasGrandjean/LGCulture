@@ -296,7 +296,6 @@ export type Database = {
       get_random_quiz: {
         Args: {
           p_category: string
-          p_language: Database["public"]["Enums"]["languages"]
           p_limit?: number
         }
         Returns: {
@@ -305,7 +304,6 @@ export type Database = {
           category: string
           difficulty: Database["public"]["Enums"]["difficulties"] | null
           id: number
-          language: Database["public"]["Enums"]["languages"]
           metadata: Json | null
           nb_count: number | null
           question: string | null
@@ -319,7 +317,6 @@ export type Database = {
         Args: {
           p_categories: string[]
           p_difficulty?: Database["public"]["Enums"]["difficulties"]
-          p_language: Database["public"]["Enums"]["languages"]
           p_limit?: number
         }
         Returns: {

@@ -13,7 +13,6 @@ export const useQuizz = (cat: Array<string> = defaultCategories, lang: string = 
 
 		const { data: raw, error: err } = await supabase.rpc("get_random_quizzes", {
 			p_categories: cat,
-			p_language: lang as "fr" | "en" | "es" | "it" | "de" | "nl",
 			p_limit: 1,
 			p_difficulty: difficulty as "easy" | "medium" | "hard",
 		}).single()

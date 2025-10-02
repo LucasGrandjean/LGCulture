@@ -52,7 +52,6 @@ export default defineEventHandler(async (event) => {
 			const { data: responses, error } = await supabase
 				.rpc("get_random_quizzes", {
 					p_categories: categories,
-					p_language: "fr",
 					p_limit: nbQuestions,
 				})
 

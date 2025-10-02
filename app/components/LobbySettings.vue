@@ -82,7 +82,7 @@ const onSubmit = handleSubmit(async (values) => {
 
     if (error) {
       toast.error(`Erreur ${error.code}`, {
-        description: error.details,
+        description: String(Number(lobby.value?.id)),
       });
     } else {
       lobby.value = new Lobby(data);
