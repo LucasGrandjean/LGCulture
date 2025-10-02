@@ -628,7 +628,6 @@ function handleQuestionEnded() {
 // Récupère depuis la base la dernière version de players_data
 async function refreshPlayersData(prevIndex: number) {
   if (!game.value) return;
-
   try {
     const { data, error } = await supabase
       .from("games")
@@ -640,26 +639,11 @@ async function refreshPlayersData(prevIndex: number) {
       console.error("Erreur lors du rafraîchissement des playersData", error);
       return;
     }
-
     if (data?.players_data && Array.isArray(data.players_data)) {
-      // Merge instead of replacing
-      data.players_data.forEach((playerData: any, playerIdx: number) => {
-        const localPlayer = game.value?.playersData[playerIdx];
-        if (!localPlayer) return;
-
-        // Merge answers: keep existing answers unless DB has new ones
-        playerData.answers.forEach((ans: string | undefined, ansIdx: number) => {
-          if (ans !== undefined) {
-            localPlayer.answers[ansIdx] = ans;
-          }
-        });
-
-        // Merge scores fully
-        localPlayer.score = playerData.score;
-      });
-
+      // On remplace playersData localement; les réponses pour prevIndex seront ainsi à jour
+      game.value.playersData = (data.players_data as unknown) as Game["playersData"];
       console.log(
-        `playersData fusionné après rafraîchissement pour la question précédente (index ${prevIndex})`
+        `playersData rafraîchi pour la question précédente (index ${prevIndex})`
       );
     }
   } catch (e) {
@@ -854,28 +838,26 @@ function handleHostCorrectionSwitch(correction: boolean) {
   }
 }
 
-const getPlayerAnswerByIndex = computed(() => {
-  if (!game.value) return undefined;
-
-  // Use the snapshot index for correction phase
-  const index =
-    game.value.phase === "correction" && questionIndexAtStart.value !== null
-      ? questionIndexAtStart.value
-      : game.value.currentQuestionIndex;
-
-  const playerId = game.value.playersData[game.value.currentPlayerIndex]?.id;
-
-  // Hide answers for disconnected players during correction
-  if (
-    game.value.phase === "correction" &&
-    playerId &&
-    disconnectedAtCorrection.value.has(playerId)
-  ) {
-    return undefined;
-  }
-
-  return game.value.playersData[game.value.currentPlayerIndex]?.answers[index];
-});
+const getPlayerAnswerByIndex = computed(
+  () =>
+    // Hide answers during correction for players who were disconnected at correction start
+    ((): string | undefined => {
+      if (!game.value) return undefined;
+      const playerId = game.value.playersData[game.value.currentPlayerIndex]?.id;
+      const answer =
+        game.value.playersData[game.value.currentPlayerIndex]?.answers[
+          game.value.currentQuestionIndex
+        ];
+      if (
+        game.value.phase === "correction" &&
+        playerId &&
+        disconnectedAtCorrection.value.has(playerId)
+      ) {
+        return undefined;
+      }
+      return answer;
+    })()
+);
 
 // Réinitialise les votes et le vote personnel à chaque entrée en phase "correction"
 watch(
