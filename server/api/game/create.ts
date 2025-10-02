@@ -103,13 +103,7 @@ export default defineEventHandler(async (event) => {
 			]
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			questions = responses.map((response: any) => {
-				const questionText = response.question?.toLowerCase() ?? ""
-
-				return keywords.some(word => questionText.includes(word))
-					? new Quizz(response)
-					: new Quizz(response, { type: "open" })
-			})
+			questions = responses.map((response: any) => new Quizz(response))
 		}
 		catch (error) {
 			console.error(error)

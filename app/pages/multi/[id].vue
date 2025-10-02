@@ -548,7 +548,7 @@ async function startLobby() {
     await $fetch("/api/game/create", {
       method: "POST",
       query: {
-        nbQuestions: lobby.value?.nbQuestions || 20,
+        nbQuestions: lobby.value?.nbQuestions || 5,
         lobbyId: route.params.id,
       },
     });
