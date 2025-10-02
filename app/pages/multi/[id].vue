@@ -838,26 +838,27 @@ function handleHostCorrectionSwitch(correction: boolean) {
   }
 }
 
-const getPlayerAnswerByIndex = computed(
-  () =>
-    // Hide answers during correction for players who were disconnected at correction start
-    ((): string | undefined => {
-      if (!game.value) return undefined;
-      const playerId = game.value.playersData[game.value.currentPlayerIndex]?.id;
-      const answer =
-        game.value.playersData[game.value.currentPlayerIndex]?.answers[
-          game.value.currentQuestionIndex
-        ];
-      if (
-        game.value.phase === "correction" &&
-        playerId &&
-        disconnectedAtCorrection.value.has(playerId)
-      ) {
-        return undefined;
-      }
-      return answer;
-    })()
-);
+const getPlayerAnswerByIndex = computed(() => {
+  if (!game.value) return undefined;
+
+  const playerId = game.value.playersData[game.value.currentPlayerIndex]?.id;
+  const index =
+    game.value.phase === "correction" && questionIndexAtStart.value !== null
+      ? questionIndexAtStart.value
+      : game.value.currentQuestionIndex;
+
+  const answer = game.value.playersData[game.value.currentPlayerIndex]?.answers[index];
+
+  if (
+    game.value.phase === "correction" &&
+    playerId &&
+    disconnectedAtCorrection.value.has(playerId)
+  ) {
+    return undefined;
+  }
+
+  return answer;
+});
 
 // Réinitialise les votes et le vote personnel à chaque entrée en phase "correction"
 watch(
