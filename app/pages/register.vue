@@ -267,7 +267,8 @@ const isProfileStepValid = computed(() => {
 const goToNextStep = async () => {
 	const isValid = await validateProfileStep()
 	if (isValid && isProfileStepValid.value) {
-		formStep.value = 1
+		// formStep.value = 1 REMOVE FROM COMMENT TO ALLOW NON ANONYMOUS LOGIN
+		createAnonymousAccount()
 	}
 }
 
@@ -280,6 +281,7 @@ const createAnonymousAccount = async () => {
 		throw new Error("Formulaire non valide")
 	}
 
+	
 	const { data, error } = await supabase.auth.signInAnonymously({
 		options: {
 			data: {
@@ -290,6 +292,28 @@ const createAnonymousAccount = async () => {
 			},
 		},
 	})
+
+	// Step 2: Create the player
+	const user = data.user;
+
+	const { data: playerData, error: playerError } = await (supabase as any)
+	.from("players")
+	.insert([
+		{
+		id: user?.id,
+		username: values.username,
+		avatar: values.avatar,
+		categories: ["lucas"],
+		},
+	])
+	.select()
+	.single();
+
+	if (playerError) {
+	console.error("Player creation error:", playerError.message);
+	return;
+	}
+
 	if (error) {
 		if (error.code === "P0001") {
 			toast.error("Nom d'utilisateur indisponible", {

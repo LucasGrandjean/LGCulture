@@ -28,7 +28,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
 	// 3) Toujours pas de player → redirige vers /login
 	if (playerStore.getPlayer == null) {
 		return navigateTo({
-			path: "/login",
+			path: "/register",
 			query: { redirect: to.fullPath },
 			replace: true,
 		})
