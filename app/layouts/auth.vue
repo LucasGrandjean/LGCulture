@@ -1,8 +1,10 @@
 <template>
 	<div class="container relative h-svh w-screen flex-col items-center justify-center overflow-hidden lg:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-		<Button :as="NuxtLink" variant="ghost" class="absolute right-4 top-4 z-10 cursor-pointer md:right-8 md:top-8" :to="loginOrRegister()">
-			{{ route.path === '/login' ? 'S\'inscrire' : 'Se connecter' }}
+		<!--<Button :as="NuxtLink" variant="ghost" class="absolute right-4 top-4 z-10 cursor-pointer md:right-8 md:top-8" :to="loginOrRegister()">
+			//{{ route.path === '/login' ? 'S\'inscrire' : 'Se connecter' }}
 		</Button>
+		REMOVE TO ADD LOGIN / REGISTER BUTTON
+		-->
 		<div class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 			<div class="absolute inset-0 overflow-hidden bg-zinc-900">
 				<IconPatternBackground :nb-rows="20" :icons-per-row="15" />
