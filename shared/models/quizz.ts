@@ -21,6 +21,9 @@ export class Quizz {
 		url: string
 		alt: string
 	}
+	audio?: {
+		url: string
+	}
 
 	constructor(data: OpenQuizzDBResult | any, additionalData?: Record<string, any>) {
 		this.themeId = data?.theme_id || data?.themeId
@@ -69,6 +72,11 @@ export class Quizz {
 			this.image = {
 				url: data.image.url,
 				alt: data.image.alt,
+			}
+		}
+		if (data?.audio) {
+			this.audio = {
+				url: data.audio.url,
 			}
 		}
 		this.metadata = data?.metadata

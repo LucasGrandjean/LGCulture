@@ -198,6 +198,9 @@ export type Database = {
           theme_id: number
           type: Database["public"]["Enums"]["types"]
           wiki: string | null
+          image: Json | null
+          audio: Json | null
+
         }
         Insert: {
           anecdote?: string | null
@@ -213,6 +216,8 @@ export type Database = {
           theme_id: number
           type?: Database["public"]["Enums"]["types"]
           wiki?: string | null
+          image?: Json | null
+          audio?: Json | null
         }
         Update: {
           anecdote?: string | null
@@ -228,6 +233,8 @@ export type Database = {
           theme_id?: number
           type?: Database["public"]["Enums"]["types"]
           wiki?: string | null
+          image?: Json | null
+          audio?: Json | null
         }
         Relationships: []
       }
