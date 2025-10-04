@@ -87,6 +87,7 @@
           :src="content?.image?.url"
           :alt="content?.image?.alt"
         />
+        <audio v-if="content?.audio" class="w-full rounded-md" :src="content?.audio?.url" controls > Ton navigateur ne supporte pas les fichiers audio </audio>
         <span
           class="mb-4 text-pretty text-center text-xl font-semibold sm:mb-8 sm:text-xl md:text-3xl"
           >{{ content?.question }}</span
