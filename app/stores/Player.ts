@@ -88,7 +88,7 @@ export const usePlayerStore = defineStore("Player Store", () => {
 
 	supabase.auth.onAuthStateChange(async (event, session) => {
 		if (event === 'SIGNED_OUT') {
-    	navigateTo('/login')
+    	navigateTo('/register')
   	}
 	})
 

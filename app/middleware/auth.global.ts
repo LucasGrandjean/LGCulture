@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
 	const publicPaths = ["/login", "/register", "/forgot-password", "/reset-password", "/terms", "/privacy", "/legal-notice"]
 	if (publicPaths.includes(to.path)) return
 
-	// 1) Pas connecté → redirige vers /login avec redirect
+	// 1) Pas connecté → redirige vers /register (ex login) avec redirect
 	if (!user.value) {
 		return navigateTo({
 			path: "/register",

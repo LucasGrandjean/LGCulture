@@ -149,7 +149,7 @@ const description = computed(() => {
 		<!-- Logo and App Name -->
 		<h1 class="absolute left-16 top-16 flex cursor-default items-center text-4xl font-bold text-zinc-50">
 			<Icon mode="svg" name="custom:knowless-logo" class="mr-3 text-4xl" />
-			Knowless
+			LG Culture
 		</h1>
 
 		<!-- Main title -->

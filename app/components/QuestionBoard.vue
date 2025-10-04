@@ -103,7 +103,12 @@
         <template v-if="content?.type === 'open'">
           <span v-if="mode === 'multi' && phase === 'correction'" class="text-center">
             <b class="font-medium">Réponse : </b>
-            {{ content.answers.filter((answer: Quizz["answers"][number]) => answer.isCorrect).map((answer : Quizz["answers"][number]) => answer.value).join(', ') }}
+            {{
+              content.answers
+                .filter((a) => a.isCorrect)
+                .map((a) => a.value)
+                .join(', ')
+            }}
           </span>
           <Input
             ref="openInput"
@@ -112,29 +117,8 @@
             class="mx-auto max-w-xs"
             :disabled="mode === 'multi' && phase === 'correction'"
           />
-          <Switch
-            v-if="mode === 'multi' && phase === 'correction' && showSwitch"
-            class="mx-auto data-[state=checked]:bg-emerald-500"
-            :class="
-              validationStatus === 'uncertain'
-                ? 'data-[state=unchecked]:bg-amber-500'
-                : 'data-[state=unchecked]:bg-red-500'
-            "
-            :disabled="!(switchEnabled ?? false)"
-            v-model="isCorrect"
-            @update:modelValue="onOpenSwitchUpdate"
-          >
-            <template #thumb>
-              <Icon v-if="isCorrect" name="lucide:check" class="text-xs" />
-              <Icon
-                v-else-if="validationStatus === 'uncertain'"
-                name="ic:round-question-mark"
-                class="text-xs"
-              />
-              <Icon v-else name="lucide:x" class="text-xs" />
-            </template>
-          </Switch>
         </template>
+
         <ToggleGroup
           v-else-if="content?.type === 'four' || content?.type === 'two'"
           v-model="selectedAnswer"
@@ -146,11 +130,9 @@
           <ToggleGroupItem
             v-for="(choice, index) in content.answers"
             :key="`choice${index}`"
-            :ref="`choice-${index}`"
             :class="{
               '!bg-emerald-500': showResult && choice.isCorrect,
-              '!bg-red-500':
-                showResult && selectedAnswer == String(index) && !choice.isCorrect,
+              '!bg-red-500': showResult && selectedAnswer == String(index) && !choice.isCorrect,
             }"
             class="size-full py-4 cursor-pointer"
             :value="String(index)"
@@ -158,6 +140,30 @@
             {{ choice.value }}
           </ToggleGroupItem>
         </ToggleGroup>
+
+        <!-- ✅ Move the switch OUTSIDE the question-type condition -->
+        <Switch
+          v-if="mode === 'multi' && phase === 'correction' && showSwitch"
+          class="mx-auto mt-6 data-[state=checked]:bg-emerald-500"
+          :class="
+            validationStatus === 'uncertain'
+              ? 'data-[state=unchecked]:bg-amber-500'
+              : 'data-[state=unchecked]:bg-red-500'
+          "
+          :disabled="!(switchEnabled ?? false)"
+          v-model="isCorrect"
+          @update:modelValue="onOpenSwitchUpdate"
+        >
+          <template #thumb>
+            <Icon v-if="isCorrect" name="lucide:check" class="text-xs" />
+            <Icon
+              v-else-if="validationStatus === 'uncertain'"
+              name="ic:round-question-mark"
+              class="text-xs"
+            />
+            <Icon v-else name="lucide:x" class="text-xs" />
+          </template>
+        </Switch>
       </div>
 
       <Dialog v-if="mode === 'solo' && showResult">

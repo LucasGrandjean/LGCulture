@@ -11,7 +11,7 @@
 			</div>
 			<div class="relative z-20 flex cursor-default items-center text-xl font-medium text-zinc-100">
 				<Icon name="custom:knowless-logo" class="mr-3 text-3xl" />
-				Knowless
+				LG Culture
 			</div>
 		</div>
 		<div class="relative flex h-full items-center justify-center lg:p-8">
