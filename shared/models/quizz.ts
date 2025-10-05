@@ -14,6 +14,7 @@ export class Quizz {
 	language: string
 	type?: "open" | "two" | "four" | "range"
 	metadata?: Record<string, any>
+	bonusTime? : number
 
 	/* Custom value for front */
 	points: number
@@ -79,6 +80,7 @@ export class Quizz {
 				url: data.audio.url,
 			}
 		}
+		this.bonusTime = data?.bonusTime
 		this.metadata = data?.metadata
 	}
 }

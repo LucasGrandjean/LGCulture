@@ -8,13 +8,13 @@ import { defaultCategories } from "~/utils/categories"
 
 const querySchema = z.object({
 	lobbyId: z.string().length(4),
-	nbQuestions: z.coerce.number().min(1).max(20).default(20).optional(),
+	nbQuestions: z.coerce.number().min(1).max(50).default(50).optional(),
 	categories: z.string().array().default(defaultCategories).optional(),
 })
 
 export default defineEventHandler(async (event) => {
 	const supabase = await serverSupabaseClient<Database>(event)
-	const { nbQuestions = 20, lobbyId, categories = defaultCategories } = await getValidatedQuery(event, querySchema.parse)
+	const { nbQuestions = 50, lobbyId, categories = defaultCategories } = await getValidatedQuery(event, querySchema.parse)
 
 	let questions: Array<Quizz> = []
 
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
 		})
 	}
 
-	if (nbQuestions < 1 || nbQuestions > 20) {
+	if (nbQuestions < 1 || nbQuestions > 51) {
 		throw createError({
 			statusCode: 400,
 			statusMessage: "Nombre de questions invalide",

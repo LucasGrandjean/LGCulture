@@ -23,7 +23,7 @@ const formSchema = toTypedSchema(
     status: z.enum(["public", "private"]),
     allowed: z.enum(["everyone", "friendsOnly"]),
     maxPlayers: z.number().min(2).max(16).default(12),
-    nbQuestions: z.number().min(1).max(20).default(5),
+    nbQuestions: z.number().min(1).max(50).default(50),
     securityLevel: z.array(z.string()),
   })
 );
@@ -61,7 +61,7 @@ const onSubmit = handleSubmit(async (values) => {
       status: lobby?.value?.isPublic ? "public" : "private",
       allowed: lobby?.value?.isFriendsOnly ? "friendsOnly" : "everyone",
       maxPlayers: lobby?.value?.maxPlayers || 12,
-      nbQuestions: lobby?.value?.nbQuestions || 5,
+      nbQuestions: lobby?.value?.nbQuestions || 50,
       securityLevel: lobby?.value?.securityLevel || ["code", "join"],
     });
   if (hasChanged) {
@@ -73,7 +73,7 @@ const onSubmit = handleSubmit(async (values) => {
         is_public: values.status === "public",
         friends_only: values.allowed === "friendsOnly",
         max_players: values.maxPlayers,
-        nb_questions: values.nbQuestions || 5,
+        nb_questions: values.nbQuestions || 50,
         security_level: values.securityLevel,
       })
       .eq("id", Number(lobby.value?.id))
@@ -99,7 +99,7 @@ const handleUpdate = (value: boolean) => {
         status: lobby?.value?.isPublic ? "public" : "private",
         allowed: lobby?.value?.isFriendsOnly ? "friendsOnly" : "everyone",
         maxPlayers: lobby?.value?.maxPlayers || 12,
-        nbQuestions: lobby?.value?.nbQuestions || 20,
+        nbQuestions: lobby?.value?.nbQuestions || 50,
         securityLevel: lobby?.value?.securityLevel || ["code", "join"],
       },
     });
@@ -191,13 +191,13 @@ const handleUpdate = (value: boolean) => {
             <FormItem>
               <FormLabel>
                 Questions
-                <HelpTooltip content="Le nombre de questions dans la partie (1 à 20)." />
+                <HelpTooltip content="Le nombre de questions dans la partie (1 à 50)." />
               </FormLabel>
               <NumberField
                 class="gap-2"
                 :min="1"
                 :model-value="value"
-                :max="20"
+                :max="50"
                 @update:model-value="(v) => { if (v) { setFieldValue('nbQuestions', v); } else { setFieldValue('nbQuestions', undefined);}}"
               >
                 <NumberFieldContent>

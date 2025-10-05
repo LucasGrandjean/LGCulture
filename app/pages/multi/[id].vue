@@ -10,7 +10,9 @@
           :phase="game.phase"
           :content="game.questions[game.currentQuestionIndex]!"
           :question-number="game.currentQuestionIndex"
-          :duration="game.phase === 'question' ? 10000 : 0"
+          :duration="game.phase === 'question' 
+          ? 10000 + (game?.questions[game.currentQuestionIndex]?.bonusTime || 0) 
+          : 0"
           :start-at="syncedStartAt"
           :lobby="lobby"
           :answer="getPlayerAnswerByIndex"

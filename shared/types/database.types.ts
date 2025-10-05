@@ -200,6 +200,7 @@ export type Database = {
           wiki: string | null
           image: Json | null
           audio: Json | null
+          bonusTime: number | null
 
         }
         Insert: {
@@ -218,6 +219,7 @@ export type Database = {
           wiki?: string | null
           image?: Json | null
           audio?: Json | null
+          bonusTime?: number | null
         }
         Update: {
           anecdote?: string | null
@@ -235,6 +237,7 @@ export type Database = {
           wiki?: string | null
           image?: Json | null
           audio?: Json | null
+          bonusTime?: number | null
         }
         Relationships: []
       }
@@ -318,6 +321,7 @@ export type Database = {
           theme_id: number
           type: Database["public"]["Enums"]["types"]
           wiki: string | null
+          bonusTime : number | null
         }[]
       }
       get_random_quizzes: {
@@ -340,6 +344,7 @@ export type Database = {
           theme_id: number
           type: Database["public"]["Enums"]["types"]
           wiki: string | null
+          bonusTime : number | null
         }[]
       }
       next_player_correction: {
