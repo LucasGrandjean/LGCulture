@@ -11,7 +11,7 @@
           :content="game.questions[game.currentQuestionIndex]!"
           :question-number="game.currentQuestionIndex"
           :duration="game.phase === 'question' 
-          ? 10000 + (game?.questions[game.currentQuestionIndex]?.bonusTime || 0) 
+          ? 10000 + ((game?.questions[game.currentQuestionIndex]?.bonusTime || 0) /2)
           : 0"
           :start-at="syncedStartAt"
           :lobby="lobby"
