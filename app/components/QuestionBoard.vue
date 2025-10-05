@@ -87,7 +87,15 @@
           :src="content?.image?.url"
           :alt="content?.image?.alt"
         />
-        <audio v-if="content?.audio" class="w-full rounded-md" :src="content?.audio?.url" controls > Ton navigateur ne supporte pas les fichiers audio </audio>
+
+        <audio
+        v-if="content?.audio" 
+        class="w-full rounded-md" 
+        :src="content?.audio?.url" 
+        controls > 
+        Ton navigateur ne supporte pas les fichiers audio 
+        </audio>
+       
         <span
           class="mb-4 text-pretty text-center text-xl font-semibold sm:mb-8 sm:text-xl md:text-3xl"
           >{{ content?.question }}</span
@@ -104,6 +112,29 @@
             class="mx-auto max-w-xs"
             :disabled="mode === 'multi' && phase === 'correction'"
           />
+
+          <Switch
+            v-if="mode === 'multi' && phase === 'correction' && showSwitch"
+            class="mx-auto data-[state=checked]:bg-emerald-500"
+            :class="
+              validationStatus === 'uncertain'
+                ? 'data-[state=unchecked]:bg-amber-500'
+                : 'data-[state=unchecked]:bg-red-500'
+            "
+            :disabled="!(switchEnabled ?? false)"
+            v-model="isCorrect"
+            @update:modelValue="onOpenSwitchUpdate"
+          >
+            <template #thumb>
+              <Icon v-if="isCorrect" name="lucide:check" class="text-xs" />
+              <Icon
+                v-else-if="validationStatus === 'uncertain'"
+                name="ic:round-question-mark"
+                class="text-xs"
+              />
+              <Icon v-else name="lucide:x" class="text-xs" />
+            </template>
+          </Switch>
         </template>
         <ToggleGroup
           v-else-if="content?.type === 'four' || content?.type === 'two'"
@@ -128,28 +159,6 @@
             {{ choice.value }}
           </ToggleGroupItem>
         </ToggleGroup>
-          <Switch
-            v-if="mode === 'multi' && phase === 'correction' && showSwitch"
-            class="mx-auto data-[state=checked]:bg-emerald-500"
-            :class="
-              validationStatus === 'uncertain'
-                ? 'data-[state=unchecked]:bg-amber-500'
-                : 'data-[state=unchecked]:bg-red-500'
-            "
-            :disabled="!(switchEnabled ?? false)"
-            v-model="isCorrect"
-            @update:modelValue="onOpenSwitchUpdate"
-          >
-            <template #thumb>
-              <Icon v-if="isCorrect" name="lucide:check" class="text-xs" />
-              <Icon
-                v-else-if="validationStatus === 'uncertain'"
-                name="ic:round-question-mark"
-                class="text-xs"
-              />
-              <Icon v-else name="lucide:x" class="text-xs" />
-            </template>
-          </Switch>
       </div>
 
       <Dialog v-if="mode === 'solo' && showResult">
@@ -452,6 +461,7 @@ watch(
     if ((props as any).mode === 'multi' && (props as any).phase === 'correction') {
       if (typeof newVal === 'boolean') {
         isCorrect.value = newVal
+        // emit("corrected", newVal); (REMOVE TO ADD SWITCH TO NOT-OPEN QUESTIONS)
       }
     }
   },

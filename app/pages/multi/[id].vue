@@ -456,7 +456,7 @@ function handleBroadcastChangeMode(payload: any) {
 }
 
 function handleBroadcastAnswerSubmit(payload: any) {
-  console.log("Réponse soumise via broadcast:", payload);
+  //console.log("Réponse soumise via broadcast:", payload);
   // Logique pour traiter la réponse d'un autre joueur
 }
 
@@ -642,9 +642,9 @@ async function refreshPlayersData(prevIndex: number) {
     if (data?.players_data && Array.isArray(data.players_data)) {
       // On remplace playersData localement; les réponses pour prevIndex seront ainsi à jour
       game.value.playersData = (data.players_data as unknown) as Game["playersData"];
-      console.log(
-        `playersData rafraîchi pour la question précédente (index ${prevIndex})`
-      );
+      //console.log(
+      //  `playersData rafraîchi pour la question précédente (index ${prevIndex})`
+      //);
     }
   } catch (e) {
     console.error(e);
@@ -721,6 +721,38 @@ async function nextPlayerCorrection() {
 
     const baseScore = game.value?.playersData[currentPlayerIndex]?.score?.default ?? 0;
     const questionPoints = game.value?.questions[currentQuestionIndex]?.points ?? 0;
+
+    // --- Auto-evaluate for "two" or "four" questions ---
+    if (
+      game.value?.questions[currentQuestionIndex]?.type === "two" ||
+      game.value?.questions[currentQuestionIndex]?.type === "four"
+    ) {
+      const correctAnswers = game.value?.questions[currentQuestionIndex]?.answers as {
+        value: string;
+        isCorrect: boolean;
+        variants?: string[];
+      }[];
+
+      const playerAnswer =
+        game.value?.playersData[game.value?.currentPlayerIndex]?.answers[
+          currentQuestionIndex
+        ];
+
+      // Check if the player's answer matches any correct answer
+      result.value = correctAnswers?.some(
+        (ans) => ans.isCorrect && ans.value === playerAnswer
+      );
+
+      // --- LOGGING ---
+      //console.log(
+      //  `[CORRECTION] Player: ${
+          // game.value?.playersData[game.value?.currentPlayerIndex]
+        // }, QuestionType: ${game.value?.questions[currentQuestionIndex]?.type}, PlayerAnswer: ${playerAnswer}, CorrectAnswers: ${correctAnswers
+          // ?.filter((a) => a.isCorrect)
+          // .map((a) => a.value)
+          // .join(", ")}, AwardPoints: ${result.value}`
+      // );
+    }
 
     const newDefaultScore = result.value ? baseScore + questionPoints : baseScore;
 
@@ -987,12 +1019,12 @@ watch(
                   updated = true;
                 }
                 if (updated) {
-                  console.log(
-                    "Game state updated via merge:",
-                    JSON.parse(JSON.stringify(game.value))
-                  );
+                  //console.log(
+                    //"Game state updated via merge:",
+                    //JSON.parse(JSON.stringify(game.value))
+                  //);
                 } else {
-                  console.log("No relevant changes detected in payload.");
+                  //console.log("No relevant changes detected in payload.");
                 }
               }
             }
